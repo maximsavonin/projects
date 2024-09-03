@@ -2,6 +2,7 @@ package main
 
 import (
   "fmt"
+  "github.com/ssimunic/gosensors"
 //  "database/sql"
 //  _ "github.com/mattn/go-sqlite3"
 //  "log"
@@ -9,15 +10,19 @@ import (
 //  "github.com/go-telegram-bot-api/telegram-bot-api/v5"
 )
 
-func F(c chan int) {
-  var a int
-  fmt.Scan(&a)
-  c <- a
-}
-
 func main() {
-  var c chan int = make(chan int)
-  go F(c)
-  fmt.Println("Ждём ответ от другого потока")
-  fmt.Println("Получили ответ", <-c)
+  sensors, err := gosensors.NewFromSystem()
+  if err != nil {
+    panic(err)
+  }
+
+  fmt.Println(sensors)
+
+  for chip := range sensors.Chips {
+		// Iterate over entries
+		for key, value := range sensors.Chips[chip] {
+			// If CPU or GPU, print out
+			fmt.Println(key, value)
+		}
+	}
 }
