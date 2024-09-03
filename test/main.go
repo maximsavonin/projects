@@ -3,6 +3,7 @@ package main
 import (
   "fmt"
   "github.com/ssimunic/gosensors"
+  "strings"
 //  "database/sql"
 //  _ "github.com/mattn/go-sqlite3"
 //  "log"
@@ -21,8 +22,11 @@ func main() {
   for chip := range sensors.Chips {
 		// Iterate over entries
 		for key, value := range sensors.Chips[chip] {
-			// If CPU or GPU, print out
-			fmt.Println(key, value)
+			if key == "temp1" {
+        var temp float64
+        fmt.Sscan(strings.ReplaceAll(strings.ReplaceAll(value, "°C", ""), "+", ""), &temp)
+  			fmt.Println(key, temp)
+      }
 		}
 	}
 }
